@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Error — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}">
+      <span class="brand-icon">🏎</span>
+      <span>Classic Models</span>
+    </a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a>
+        <span class="sep">/</span>
+        <span>Error</span>
+      </div>
+      <div class="topbar-title">Error</div>
+    </div>
+    <div class="page-content">
+      <div class="card" style="max-width:560px; margin:40px auto;">
+        <div class="card-header">
+          <span>⚠️</span>
+          <span th:text="${errorCode != null ? errorCode + ' — ' + errorTitle : 'Error'}">Error</span>
+        </div>
+        <div class="card-body">
+          <p th:text="${errorMessage != null ? errorMessage : 'An unexpected error occurred. Please try again.'}">An unexpected error occurred.</p>
+          <div style="margin-top:20px;">
+            <a th:href="@{/}" class="btn btn-primary">← Back to Dashboard</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

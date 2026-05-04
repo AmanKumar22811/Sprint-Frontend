@@ -1,0 +1,36 @@
+HELP.md
+.project
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+
+
+# Application config (sensitive)
+src/main/resources/application.properties
+
+# Logs
+*.log
+logs/
+
+# Compiled files
+*.class
+*.jar
+*.war
+
+# IDE
+.idea/
+*.iml
+.project
+.classpath
+.settings/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp
+*.tmp
+*.swp

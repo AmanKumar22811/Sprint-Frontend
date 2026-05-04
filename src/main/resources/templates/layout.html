@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="base(title, content, activePage)">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${title} + ' — Order Inventory'">Order Inventory</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}">
+      <span class="brand-icon">🏎</span>
+      <span>Order Inventory</span>
+    </a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" th:classappend="${activePage == 'home'} ? 'active'" class="nav-link">
+        <span class="nav-icon">🏠</span> Dashboard
+      </a>
+      <a th:href="@{/analytics}" th:classappend="${activePage == 'analytics'} ? 'active'" class="nav-link">
+        <span class="nav-icon">📊</span> Sales Analytics
+      </a>
+
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" th:classappend="${activePage == 'employees'} ? 'active'" class="nav-link">
+        <span class="nav-icon">👤</span> Employees
+      </a>
+      <a th:href="@{/customers}" th:classappend="${activePage == 'customers'} ? 'active'" class="nav-link">
+        <span class="nav-icon">🤝</span> Customers
+      </a>
+      <a th:href="@{/offices}" th:classappend="${activePage == 'offices'} ? 'active'" class="nav-link">
+        <span class="nav-icon">🏢</span> Offices
+      </a>
+      <a th:href="@{/orders}" th:classappend="${activePage == 'orders'} ? 'active'" class="nav-link">
+        <span class="nav-icon">📦</span> Orders
+      </a>
+      <a th:href="@{/productlines}" th:classappend="${activePage == 'productlines'} ? 'active'" class="nav-link">
+        <span class="nav-icon">📋</span> Product Lines
+      </a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb" th:replace="${breadcrumb}"></div>
+      <div class="topbar-title" th:text="${title}">Page Title</div>
+    </div>
+    <div class="page-content" th:replace="${content}">
+      Content goes here
+    </div>
+  </div>
+</div>
+</body>
+</html>

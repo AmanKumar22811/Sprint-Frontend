@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}">
+     
+      <span>Order Inventory</span>
+    </a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link active"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <span>Home</span>
+      </div>
+      <div class="topbar-title">Dashboard</div>
+    </div>
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">All Modules</div>
+          <div class="page-header-sub">Select a module to view, edit, or create records</div>
+        </div>
+      </div>
+
+      <div class="modules-grid">
+        <!-- Employees -->
+        <a th:href="@{/employees}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Aman.png"
+               alt="Employees"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Employees</div>
+            <div class="module-card-desc">Manage sales representatives and staff. View employee details, their reporting manager, office location, and the customers they serve.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View, Edit, Create</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <!-- Customers -->
+        <a th:href="@{/customers}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Aayushi.png"
+               alt="Customers"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Customers</div>
+            <div class="module-card-desc">Manage customer accounts including contact details, billing addresses, credit limits, and associated orders and payments.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View, Edit, Create</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <!-- Offices -->
+        <a th:href="@{/offices}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Himanshu.png"
+               alt="Offices"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Offices</div>
+            <div class="module-card-desc">Manage office locations worldwide. Each office has employees assigned to it and serves a specific sales territory.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View, Edit, Create</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <!-- Orders -->
+        <a th:href="@{/orders}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Ishika.png"
+               alt="Orders"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Orders</div>
+            <div class="module-card-desc">Track customer orders from placement through shipment. View order details, line items, statuses and associated customer information.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View, Edit, Create</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <!-- Product Lines -->
+        <a th:href="@{/productlines}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Disha.png"
+               alt="Product Lines"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Product Lines</div>
+            <div class="module-card-desc">Manage product categories like Classic Cars, Motorcycles, Planes, Ships, Trains, Trucks and Vintage Cars. Each line groups related products.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View, Edit, Create</span>
+            <span>→</span>
+          </div>
+        </a>
+
+        <!-- Analytics -->
+        <a th:href="@{/analytics}" class="module-card">
+          <img class="module-card-image"
+               src="/images/Aditya.png"
+               alt="Sales Analytics"/>
+          <div class="module-card-body">
+            <div class="module-card-title">Sales Analytics</div>
+            <div class="module-card-desc">View complete order details and summary statistics across all orders including status breakdowns and key business metrics.</div>
+          </div>
+          <div class="module-card-footer">
+            <span>View Only</span>
+            <span>→</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
