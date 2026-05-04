@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="'Employee: ' + ${employee.firstName} + ' ' + ${employee.lastName} + ' — Classic Models'">Employee</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link active"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/employees}">Employees</a><span class="sep">/</span>
+        <span th:text="${employee.firstName + ' ' + employee.lastName}">Employee</span>
+      </div>
+      <div class="topbar-title" th:text="${employee.firstName + ' ' + employee.lastName}">Employee</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title" th:text="${employee.firstName + ' ' + employee.lastName}">Name</div>
+          <div class="page-header-sub">
+            Employee #<span th:text="${employee.employeeNumber}"></span> &bull;
+            <span class="badge badge-info" th:text="${employee.jobTitle}">Title</span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <a th:href="@{/employees/{id}/edit(id=${employee.employeeNumber})}" class="btn btn-warning">✏️ Edit Employee</a>
+          <a th:href="@{/employees}" class="btn btn-secondary">← Back to List</a>
+        </div>
+      </div>
+
+      <!-- Employee Details -->
+      <div class="card">
+        <div class="card-header">👤 Employee Details</div>
+        <div class="card-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">Employee Number</div>
+              <div class="detail-value" th:text="${employee.employeeNumber}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">First Name</div>
+              <div class="detail-value" th:text="${employee.firstName}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Last Name</div>
+              <div class="detail-value" th:text="${employee.lastName}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Job Title</div>
+              <div class="detail-value" th:text="${employee.jobTitle}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Email</div>
+              <div class="detail-value" th:text="${employee.email}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Extension</div>
+              <div class="detail-value" th:text="${employee.extension}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Office</div>
+              <div class="detail-value" th:if="${employee.office != null}">
+                <a th:href="@{/offices/{code}(code=${employee.office.officeCode})}"
+                   th:text="${employee.office.city + ' (' + employee.office.officeCode + ')'}">Office</a>
+              </div>
+              <div class="detail-value empty" th:if="${employee.office == null}">Not assigned</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Reports To</div>
+              <div class="detail-value" th:if="${employee.manager != null}">
+                <a th:href="@{/employees/{id}(id=${employee.manager.employeeNumber})}"
+                   th:text="${employee.manager.firstName + ' ' + employee.manager.lastName}">Manager</a>
+              </div>
+              <div class="detail-value empty" th:if="${employee.manager == null}">No manager (top-level)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customers this employee serves -->
+      <div class="card">
+        <div class="card-header">🤝 Customers Served</div>
+        <div class="card-body" style="padding:0;">
+          <div th:if="${myCustomers == null or myCustomers.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">🤝</div>
+            <div class="empty-state-title">No customers assigned</div>
+            <div class="empty-state-text">This employee has no customers assigned yet.</div>
+          </div>
+          <table th:if="${myCustomers != null and !myCustomers.isEmpty()}">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer Name</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Credit Limit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="c : ${myCustomers}">
+                <td th:text="${c.customerNumber}">-</td>
+                <td th:text="${c.customerName}">-</td>
+                <td th:text="${c.city}">-</td>
+                <td th:text="${c.country}">-</td>
+                <td class="money" th:text="${c.creditLimit != null ? '$' + #numbers.formatDecimal(c.creditLimit, 1, 2) : '—'}">-</td>
+                <td>
+                  <a th:href="@{/customers/{id}(id=${c.customerNumber})}" class="btn btn-secondary btn-sm">View</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Employees reporting to this person -->
+      <div class="card" th:if="${reportees != null and !reportees.isEmpty()}">
+        <div class="card-header">👥 Direct Reports</div>
+        <div class="card-body" style="padding:0;">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Job Title</th>
+                <th>Email</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="r : ${reportees}">
+                <td th:text="${r.employeeNumber}">-</td>
+                <td th:text="${r.firstName + ' ' + r.lastName}">-</td>
+                <td><span class="badge badge-info" th:text="${r.jobTitle}">-</span></td>
+                <td th:text="${r.email}">-</td>
+                <td><a th:href="@{/employees/{id}(id=${r.employeeNumber})}" class="btn btn-secondary btn-sm">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
