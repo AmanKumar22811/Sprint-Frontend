@@ -1,0 +1,208 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="'Office: ' + ${office.city} + ' — Classic Models'">
+      Office
+    </title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="sidebar">
+        <a class="sidebar-brand" th:href="@{/}"
+          ><span class="brand-icon">🏎</span><span>Classic Models</span></a
+        >
+        <div class="sidebar-nav">
+          <div class="nav-section-label">Overview</div>
+          <a th:href="@{/}" class="nav-link"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a th:href="@{/analytics}" class="nav-link"
+            ><span class="nav-icon">📊</span> Sales Analytics</a
+          >
+          <div class="nav-section-label">Modules</div>
+          <a th:href="@{/employees}" class="nav-link"
+            ><span class="nav-icon">👤</span> Employees</a
+          >
+          <a th:href="@{/customers}" class="nav-link"
+            ><span class="nav-icon">🤝</span> Customers</a
+          >
+          <a th:href="@{/offices}" class="nav-link active"
+            ><span class="nav-icon">🏢</span> Offices</a
+          >
+          <a th:href="@{/orders}" class="nav-link"
+            ><span class="nav-icon">📦</span> Orders</a
+          >
+          <a th:href="@{/productlines}" class="nav-link"
+            ><span class="nav-icon">📋</span> Product Lines</a
+          >
+        </div>
+      </nav>
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-breadcrumb">
+            <a th:href="@{/}">Home</a><span class="sep">/</span>
+            <a th:href="@{/offices}">Offices</a><span class="sep">/</span>
+            <span th:text="${office.city}">Office</span>
+          </div>
+          <div class="topbar-title" th:text="${office.city}">Office</div>
+        </div>
+        <div class="page-content">
+          <div
+            th:if="${successMessage}"
+            class="alert alert-success"
+            th:text="${successMessage}"
+          ></div>
+          <div
+            th:if="${errorMessage}"
+            class="alert alert-danger"
+            th:text="${errorMessage}"
+          ></div>
+
+          <div class="page-header">
+            <div>
+              <div
+                class="page-header-title"
+                th:text="${office.city + ' Office'}"
+              >
+                Office
+              </div>
+              <div class="page-header-sub">
+                Code: <strong th:text="${office.officeCode}"></strong> &bull;
+                Territory: <span th:text="${office.territory}"></span>
+              </div>
+            </div>
+            <div class="btn-group">
+              <a
+                th:href="@{/offices/{code}/edit(code=${office.officeCode})}"
+                class="btn btn-warning"
+                >✏️ Edit</a
+              >
+              <a th:href="@{/offices}" class="btn btn-secondary">← Back</a>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">🏢 Office Details</div>
+            <div class="card-body">
+              <div class="detail-grid">
+                <div class="detail-item">
+                  <div class="detail-label">Office Code</div>
+                  <div class="detail-value" th:text="${office.officeCode}">
+                    -
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">City</div>
+                  <div class="detail-value" th:text="${office.city}">-</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Country</div>
+                  <div class="detail-value" th:text="${office.country}">-</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Territory</div>
+                  <div class="detail-value" th:text="${office.territory}">
+                    -
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Phone</div>
+                  <div class="detail-value" th:text="${office.phone}">-</div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Address Line 1</div>
+                  <div class="detail-value" th:text="${office.addressLine1}">
+                    -
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Address Line 2</div>
+                  <div
+                    class="detail-value"
+                    th:text="${office.addressLine2 != null and office.addressLine2 != '' ? office.addressLine2 : '—'}"
+                  >
+                    -
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">State</div>
+                  <div
+                    class="detail-value"
+                    th:text="${office.state != null and office.state != '' ? office.state : '—'}"
+                  >
+                    -
+                  </div>
+                </div>
+                <div class="detail-item">
+                  <div class="detail-label">Postal Code</div>
+                  <div class="detail-value" th:text="${office.postalCode}">
+                    -
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              👤 Employees at this Office
+              <span
+                style="
+                  margin-left: auto;
+                  font-size: 0.8rem;
+                  font-weight: 400;
+                  color: #666;
+                "
+                th:text="${employees != null ? employees.size() + ' employees' : '0 employees'}"
+              ></span>
+            </div>
+            <div class="card-body" style="padding: 0">
+              <div
+                th:if="${employees == null or employees.isEmpty()}"
+                class="empty-state"
+              >
+                <div class="empty-state-icon">👤</div>
+                <div class="empty-state-title">No employees at this office</div>
+              </div>
+              <table th:if="${employees != null and !employees.isEmpty()}">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Job Title</th>
+                    <th>Email</th>
+                    <th>Extension</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr th:each="e : ${employees}">
+                    <td th:text="${e.employeeNumber}">-</td>
+                    <td th:text="${e.firstName + ' ' + e.lastName}">-</td>
+                    <td>
+                      <span class="badge badge-info" th:text="${e.jobTitle}"
+                        >-</span
+                      >
+                    </td>
+                    <td th:text="${e.email}">-</td>
+                    <td th:text="${e.extension}">-</td>
+                    <td>
+                      <a
+                        th:href="@{/employees/{id}(id=${e.employeeNumber})}"
+                        class="btn btn-secondary btn-sm"
+                        >View</a
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
