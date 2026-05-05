@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employees — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link active"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span><span>Employees</span>
+      </div>
+      <div class="topbar-title">Employees</div>
+    </div>
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Employees</div>
+          <div class="page-header-sub" th:text="${count} + ' total employees'">0 total employees</div>
+        </div>
+        <a th:href="@{/employees/new}" class="btn btn-success">+ New Employee</a>
+      </div>
+
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Job Title</th>
+              <th>Email</th>
+              <th>Extension</th>
+              <th>Office</th>
+              <th>Manager</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr th:if="${employees == null or employees.isEmpty()}">
+              <td colspan="8">
+                <div class="empty-state">
+                  <div class="empty-state-icon">👤</div>
+                  <div class="empty-state-title">No employees found</div>
+                  <div class="empty-state-text">No employee records are available.</div>
+                </div>
+              </td>
+            </tr>
+            <tr th:each="emp : ${employees}">
+              <td th:text="${emp.employeeNumber}">-</td>
+              <td>
+                <strong th:text="${emp.firstName + ' ' + emp.lastName}">Name</strong>
+              </td>
+              <td>
+                <span class="badge badge-info" th:text="${emp.jobTitle}">Title</span>
+              </td>
+              <td th:text="${emp.email}">-</td>
+              <td th:text="${emp.extension}">-</td>
+              <td th:text="${emp.office != null ? emp.office.city : '—'}">-</td>
+              <td th:text="${emp.manager != null ? emp.manager.firstName + ' ' + emp.manager.lastName : '—'}">-</td>
+              <td>
+                <div class="btn-group">
+                  <a th:href="@{/employees/{id}(id=${emp.employeeNumber})}" class="btn btn-secondary btn-sm">View</a>
+                  <a th:href="@{/employees/{id}/edit(id=${emp.employeeNumber})}" class="btn btn-warning btn-sm">Edit</a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="pagination-controls" th:if="${totalPages > 1}">
+        <a th:if="${currentPage > 0}"
+           th:href="@{/employees(page=${currentPage - 1})}"
+           class="btn btn-secondary btn-sm">← Prev</a>
+        <span class="page-info" th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages}"></span>
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/employees(page=${currentPage + 1})}"
+           class="btn btn-secondary btn-sm">Next →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
