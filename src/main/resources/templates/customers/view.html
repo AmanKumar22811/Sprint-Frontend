@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="'Customer: ' + ${customer.customerName} + ' — Classic Models'">Customer</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link active"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/customers}">Customers</a><span class="sep">/</span>
+        <span th:text="${customer.customerName}">Customer</span>
+      </div>
+      <div class="topbar-title" th:text="${customer.customerName}">Customer</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title" th:text="${customer.customerName}">Name</div>
+          <div class="page-header-sub">Customer #<span th:text="${customer.customerNumber}"></span></div>
+        </div>
+        <div class="btn-group">
+          <a th:href="@{/customers/{id}/edit(id=${customer.customerNumber})}" class="btn btn-warning">✏️ Edit</a>
+          <a th:href="@{/customers}" class="btn btn-secondary">← Back</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🤝 Customer Details</div>
+        <div class="card-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">Customer Number</div>
+              <div class="detail-value" th:text="${customer.customerNumber}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Customer Name</div>
+              <div class="detail-value" th:text="${customer.customerName}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Contact Name</div>
+              <div class="detail-value" th:text="${customer.contactFirstName + ' ' + customer.contactLastName}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Phone</div>
+              <div class="detail-value" th:text="${customer.phone}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Address Line 1</div>
+              <div class="detail-value" th:text="${customer.addressLine1}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Address Line 2</div>
+              <div class="detail-value" th:text="${customer.addressLine2 != null and customer.addressLine2 != '' ? customer.addressLine2 : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">City</div>
+              <div class="detail-value" th:text="${customer.city}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">State</div>
+              <div class="detail-value" th:text="${customer.state != null and customer.state != '' ? customer.state : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Postal Code</div>
+              <div class="detail-value" th:text="${customer.postalCode != null and customer.postalCode != '' ? customer.postalCode : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Country</div>
+              <div class="detail-value" th:text="${customer.country}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Credit Limit</div>
+              <div class="detail-value money" th:text="${customer.creditLimit != null ? '$' + #numbers.formatDecimal(customer.creditLimit,1,2) : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Sales Representative</div>
+              <div class="detail-value" th:if="${customer.salesRepEmployee != null}">
+                <a th:href="@{/employees/{id}(id=${customer.salesRepEmployee.employeeNumber})}"
+                   th:text="${customer.salesRepEmployee.firstName + ' ' + customer.salesRepEmployee.lastName}">Rep</a>
+              </div>
+              <div class="detail-value empty" th:if="${customer.salesRepEmployee == null}">No rep assigned</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders -->
+      <div class="card">
+        <div class="card-header">📦 Orders
+          <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:#666;"
+                th:text="${orders != null ? orders.size() + ' orders' : '0 orders'}"></span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div th:if="${orders == null or orders.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">📦</div>
+            <div class="empty-state-title">No orders found</div>
+          </div>
+          <table th:if="${orders != null and !orders.isEmpty()}">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Order Date</th>
+                <th>Required Date</th>
+                <th>Shipped Date</th>
+                <th>Status</th>
+                <th>Comments</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="o : ${orders}">
+                <td th:text="${o.orderNumber}">-</td>
+                <td th:text="${o.orderDate}">-</td>
+                <td th:text="${o.requiredDate}">-</td>
+                <td th:text="${o.shippedDate != null ? o.shippedDate : '—'}">-</td>
+                <td>
+                  <span th:class="'badge ' + (${o.status == 'Shipped'} ? 'badge-success' : (${o.status == 'Cancelled'} ? 'badge-danger' : (${o.status == 'In Process'} ? 'badge-primary' : 'badge-warning')))"
+                        th:text="${o.status}">-</span>
+                </td>
+                <td th:text="${o.comments != null and o.comments != '' ? o.comments : '—'}">-</td>
+                <td><a th:href="@{/orders/{n}(n=${o.orderNumber})}" class="btn btn-secondary btn-sm">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Payments -->
+      <div class="card">
+        <div class="card-header">💳 Payments
+          <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:#666;"
+                th:text="${payments != null ? payments.size() + ' payments' : '0 payments'}"></span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div th:if="${payments == null or payments.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">💳</div>
+            <div class="empty-state-title">No payments found</div>
+          </div>
+          <table th:if="${payments != null and !payments.isEmpty()}">
+            <thead>
+              <tr>
+                <th>Check Number</th>
+                <th>Payment Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="p : ${payments}">
+                <td th:text="${p.id != null ? p.id.checkNumber : '—'}">-</td>
+                <td th:text="${p.paymentDate}">-</td>
+                <td class="money" th:text="${p.amount != null ? '$' + #numbers.formatDecimal(p.amount,1,2) : '—'}">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
