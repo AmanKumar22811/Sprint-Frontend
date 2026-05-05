@@ -1,0 +1,193 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Office — Classic Models</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="sidebar">
+        <a class="sidebar-brand" th:href="@{/}"
+          ><span class="brand-icon">🏎</span><span>Classic Models</span></a
+        >
+        <div class="sidebar-nav">
+          <div class="nav-section-label">Overview</div>
+          <a th:href="@{/}" class="nav-link"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a th:href="@{/analytics}" class="nav-link"
+            ><span class="nav-icon">📊</span> Sales Analytics</a
+          >
+          <div class="nav-section-label">Modules</div>
+          <a th:href="@{/employees}" class="nav-link"
+            ><span class="nav-icon">👤</span> Employees</a
+          >
+          <a th:href="@{/customers}" class="nav-link"
+            ><span class="nav-icon">🤝</span> Customers</a
+          >
+          <a th:href="@{/offices}" class="nav-link active"
+            ><span class="nav-icon">🏢</span> Offices</a
+          >
+          <a th:href="@{/orders}" class="nav-link"
+            ><span class="nav-icon">📦</span> Orders</a
+          >
+          <a th:href="@{/productlines}" class="nav-link"
+            ><span class="nav-icon">📋</span> Product Lines</a
+          >
+        </div>
+      </nav>
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-breadcrumb">
+            <a th:href="@{/}">Home</a><span class="sep">/</span>
+            <a th:href="@{/offices}">Offices</a><span class="sep">/</span>
+            <a
+              th:href="@{/offices/{code}(code=${office.officeCode})}"
+              th:text="${office.city}"
+              >Office</a
+            ><span class="sep">/</span>
+            <span>Edit</span>
+          </div>
+          <div class="topbar-title">Edit Office</div>
+        </div>
+        <div class="page-content">
+          <div
+            th:if="${errorMessage}"
+            class="alert alert-danger"
+            th:text="${errorMessage}"
+          ></div>
+
+          <div class="page-header">
+            <div>
+              <div class="page-header-title">Edit Office</div>
+              <div
+                class="page-header-sub"
+                th:text="'Code: ' + ${office.officeCode} + ' — ' + ${office.city}"
+              ></div>
+            </div>
+            <a
+              th:href="@{/offices/{code}(code=${office.officeCode})}"
+              class="btn btn-secondary"
+              >← Cancel</a
+            >
+          </div>
+
+          <div class="card">
+            <div class="card-header">✏️ Edit Office Details</div>
+            <div class="card-body">
+              <form
+                th:action="@{/offices/{code}/edit(code=${office.officeCode})}"
+                method="post"
+              >
+                <div class="form-grid">
+                  <div class="form-group">
+                    <label class="form-label"
+                      >City <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="city"
+                      class="form-control"
+                      required
+                      th:value="${office.city}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Phone <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="phone"
+                      class="form-control"
+                      required
+                      th:value="${office.phone}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Address Line 1 <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="addressLine1"
+                      class="form-control"
+                      required
+                      th:value="${office.addressLine1}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address Line 2</label>
+                    <input
+                      type="text"
+                      name="addressLine2"
+                      class="form-control"
+                      th:value="${office.addressLine2}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">State</label>
+                    <input
+                      type="text"
+                      name="state"
+                      class="form-control"
+                      th:value="${office.state}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Country <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="country"
+                      class="form-control"
+                      required
+                      th:value="${office.country}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Postal Code <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="postalCode"
+                      class="form-control"
+                      required
+                      th:value="${office.postalCode}"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label"
+                      >Territory <span class="required">*</span></label
+                    >
+                    <input
+                      type="text"
+                      name="territory"
+                      class="form-control"
+                      required
+                      th:value="${office.territory}"
+                    />
+                  </div>
+                </div>
+                <div style="margin-top: 24px" class="btn-group">
+                  <button type="submit" class="btn btn-primary">
+                    💾 Save Changes
+                  </button>
+                  <a
+                    th:href="@{/offices/{code}(code=${office.officeCode})}"
+                    class="btn btn-secondary"
+                    >Cancel</a
+                  >
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

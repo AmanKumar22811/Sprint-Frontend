@@ -1,0 +1,150 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offices — Classic Models</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+  <body>
+    <div class="layout">
+      <nav class="sidebar">
+        <a class="sidebar-brand" th:href="@{/}"
+          ><span class="brand-icon">🏎</span><span>Classic Models</span></a
+        >
+        <div class="sidebar-nav">
+          <div class="nav-section-label">Overview</div>
+          <a th:href="@{/}" class="nav-link"
+            ><span class="nav-icon">🏠</span> Dashboard</a
+          >
+          <a th:href="@{/analytics}" class="nav-link"
+            ><span class="nav-icon">📊</span> Sales Analytics</a
+          >
+          <div class="nav-section-label">Modules</div>
+          <a th:href="@{/employees}" class="nav-link"
+            ><span class="nav-icon">👤</span> Employees</a
+          >
+          <a th:href="@{/customers}" class="nav-link"
+            ><span class="nav-icon">🤝</span> Customers</a
+          >
+          <a th:href="@{/offices}" class="nav-link active"
+            ><span class="nav-icon">🏢</span> Offices</a
+          >
+          <a th:href="@{/orders}" class="nav-link"
+            ><span class="nav-icon">📦</span> Orders</a
+          >
+          <a th:href="@{/productlines}" class="nav-link"
+            ><span class="nav-icon">📋</span> Product Lines</a
+          >
+        </div>
+      </nav>
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-breadcrumb">
+            <a th:href="@{/}">Home</a><span class="sep">/</span
+            ><span>Offices</span>
+          </div>
+          <div class="topbar-title">Offices</div>
+        </div>
+        <div class="page-content">
+          <div class="page-header">
+            <div>
+              <div class="page-header-title">Offices</div>
+              <div
+                class="page-header-sub"
+                th:text="${count} + ' office locations'"
+              >
+                0 offices
+              </div>
+            </div>
+            <a th:href="@{/offices/new}" class="btn btn-success"
+              >+ New Office</a
+            >
+          </div>
+
+          <div
+            th:if="${successMessage}"
+            class="alert alert-success"
+            th:text="${successMessage}"
+          ></div>
+          <div
+            th:if="${errorMessage}"
+            class="alert alert-danger"
+            th:text="${errorMessage}"
+          ></div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>City</th>
+                  <th>Country</th>
+                  <th>Territory</th>
+                  <th>Phone</th>
+                  <th>Address</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:if="${offices == null or offices.isEmpty()}">
+                  <td colspan="7">
+                    <div class="empty-state">
+                      <div class="empty-state-icon">🏢</div>
+                      <div class="empty-state-title">No offices found</div>
+                    </div>
+                  </td>
+                </tr>
+                <tr th:each="o : ${offices}">
+                  <td><strong th:text="${o.officeCode}">-</strong></td>
+                  <td th:text="${o.city}">-</td>
+                  <td th:text="${o.country}">-</td>
+                  <td>
+                    <span class="badge badge-primary" th:text="${o.territory}"
+                      >-</span
+                    >
+                  </td>
+                  <td th:text="${o.phone}">-</td>
+                  <td th:text="${o.addressLine1}">-</td>
+                  <td>
+                    <div class="btn-group">
+                      <a
+                        th:href="@{/offices/{code}(code=${o.officeCode})}"
+                        class="btn btn-secondary btn-sm"
+                        >View</a
+                      >
+                      <a
+                        th:href="@{/offices/{code}/edit(code=${o.officeCode})}"
+                        class="btn btn-warning btn-sm"
+                        >Edit</a
+                      >
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pagination-controls" th:if="${totalPages > 1}">
+            <a
+              th:if="${currentPage > 0}"
+              th:href="@{/offices(page=${currentPage - 1})}"
+              class="btn btn-secondary btn-sm"
+              >← Prev</a
+            >
+            <span
+              class="page-info"
+              th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages}"
+            ></span>
+            <a
+              th:if="${currentPage + 1 < totalPages}"
+              th:href="@{/offices(page=${currentPage + 1})}"
+              class="btn btn-secondary btn-sm"
+              >Next →</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
