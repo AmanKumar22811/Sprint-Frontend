@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${product.productName} + ' — Classic Models'">Product</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/products}">Products</a><span class="sep">/</span>
+        <span th:text="${product.productName}">Product</span>
+      </div>
+      <div class="topbar-title" th:text="${product.productName}">Product</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title" th:text="${product.productName}">Name</div>
+          <div class="page-header-sub">Code: <strong th:text="${product.productCode}"></strong></div>
+        </div>
+        <div class="btn-group">
+          <a th:href="@{/products/{code}/edit(code=${product.productCode})}" class="btn btn-warning">✏️ Edit</a>
+          <a th:href="@{/products}" class="btn btn-secondary">← Back</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">🚗 Product Details</div>
+        <div class="card-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">Product Code</div>
+              <div class="detail-value" th:text="${product.productCode}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Product Name</div>
+              <div class="detail-value" th:text="${product.productName}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Product Line</div>
+              <div class="detail-value" th:if="${product.productLineEntity != null}">
+                <a th:href="@{/productlines/{name}(name=${product.productLineEntity.productLine})}"
+                   th:text="${product.productLineEntity.productLine}">PL</a>
+              </div>
+              <div class="detail-value empty" th:if="${product.productLineEntity == null}">—</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Scale</div>
+              <div class="detail-value" th:text="${product.productScale}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Vendor</div>
+              <div class="detail-value" th:text="${product.productVendor}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Quantity in Stock</div>
+              <div class="detail-value">
+                <span th:class="'badge ' + (${product.quantityInStock < 100} ? 'badge-danger' : (${product.quantityInStock < 1000} ? 'badge-warning' : 'badge-success'))"
+                      th:text="${product.quantityInStock}">-</span>
+              </div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Buy Price</div>
+              <div class="detail-value money" th:text="${product.buyPrice != null ? '$' + #numbers.formatDecimal(product.buyPrice,1,2) : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">MSRP</div>
+              <div class="detail-value money" th:text="${product.MSRP != null ? '$' + #numbers.formatDecimal(product.MSRP,1,2) : '—'}">-</div>
+            </div>
+            <div class="detail-item full" style="grid-column:1/-1;">
+              <div class="detail-label">Description</div>
+              <div class="detail-value" style="line-height:1.6;white-space:pre-wrap;" th:text="${product.productDescription}">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

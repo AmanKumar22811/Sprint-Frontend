@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Product — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/products}">Products</a><span class="sep">/</span>
+        <a th:href="@{/products/{code}(code=${product.productCode})}" th:text="${product.productName}">Product</a><span class="sep">/</span>
+        <span>Edit</span>
+      </div>
+      <div class="topbar-title">Edit Product</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Edit Product</div>
+          <div class="page-header-sub" th:text="${product.productCode} + ' — ' + ${product.productName}"></div>
+        </div>
+        <a th:href="@{/products/{code}(code=${product.productCode})}" class="btn btn-secondary">← Cancel</a>
+      </div>
+
+      <div class="card">
+        <div class="card-header">✏️ Edit Product Details</div>
+        <div class="card-body">
+          <form th:action="@{/products/{code}/edit(code=${product.productCode})}" method="post">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Product Name <span class="required">*</span></label>
+                <input type="text" name="productName" class="form-control" required th:value="${product.productName}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Product Line <span class="required">*</span></label>
+                <select name="productLine" class="form-control" required>
+                  <option value="">— Select —</option>
+                  <option th:each="pl : ${productLines}"
+                          th:value="${pl.productLine}"
+                          th:text="${pl.productLine}"
+                          th:selected="${product.productLineEntity != null and product.productLineEntity.productLine == pl.productLine}"></option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Scale <span class="required">*</span></label>
+                <input type="text" name="productScale" class="form-control" required th:value="${product.productScale}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Vendor <span class="required">*</span></label>
+                <input type="text" name="productVendor" class="form-control" required th:value="${product.productVendor}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity in Stock <span class="required">*</span></label>
+                <input type="number" name="quantityInStock" class="form-control" required th:value="${product.quantityInStock}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Buy Price <span class="required">*</span></label>
+                <input type="number" step="0.01" name="buyPrice" class="form-control" required th:value="${product.buyPrice}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">MSRP <span class="required">*</span></label>
+                <input type="number" step="0.01" name="msrp" class="form-control" required th:value="${product.MSRP}"/>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Description <span class="required">*</span></label>
+                <textarea name="productDescription" class="form-control" rows="5" required th:text="${product.productDescription}"></textarea>
+              </div>
+            </div>
+            <div style="margin-top:24px;" class="btn-group">
+              <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+              <a th:href="@{/products/{code}(code=${product.productCode})}" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

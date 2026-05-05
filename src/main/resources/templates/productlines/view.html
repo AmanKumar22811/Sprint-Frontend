@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="${productLine.productLine} + ' — Classic Models'">Product Line</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link active"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/productlines}">Product Lines</a><span class="sep">/</span>
+        <span th:text="${productLine.productLine}">PL</span>
+      </div>
+      <div class="topbar-title" th:text="${productLine.productLine}">Product Line</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title" th:text="${productLine.productLine}">PL</div>
+        </div>
+        <div class="btn-group">
+          <a th:href="@{/productlines/{name}/edit(name=${productLine.productLine})}" class="btn btn-warning">✏️ Edit</a>
+          <a th:href="@{/productlines}" class="btn btn-secondary">← Back</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">📋 Product Line Details</div>
+        <div class="card-body">
+          <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+            <div th:if="${productLine.imageUrl != null and productLine.imageUrl != ''}"
+                 style="flex-shrink:0;width:220px;height:160px;overflow:hidden;border-radius:8px;border:1px solid #dde3ec;">
+              <img th:src="${productLine.imageUrl}" th:alt="${productLine.productLine}"
+                   style="width:100%;height:100%;object-fit:cover;"
+                   onerror="this.style.display='none'"/>
+            </div>
+            <div th:if="${productLine.imageUrl == null or productLine.imageUrl == ''}"
+                 style="flex-shrink:0;width:220px;height:160px;border-radius:8px;border:1px solid #dde3ec;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,#1a3a5c,#2563a8);">
+              📋
+            </div>
+            <div style="flex:1;min-width:220px;">
+              <div class="detail-item" style="margin-bottom:12px;">
+                <div class="detail-label">Product Line Name</div>
+                <div class="detail-value" th:text="${productLine.productLine}">-</div>
+              </div>
+              <div class="detail-item">
+                <div class="detail-label">Description</div>
+                <div class="detail-value" style="line-height:1.6;white-space:pre-wrap;"
+                     th:text="${productLine.textDescription != null ? productLine.textDescription : '—'}">-</div>
+              </div>
+              <div class="detail-item" style="margin-top:12px;" th:if="${productLine.imageUrl != null and productLine.imageUrl != ''}">
+                <div class="detail-label">Image URL</div>
+                <div class="detail-value" style="word-break:break-all;font-size:0.8rem;" th:text="${productLine.imageUrl}">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products in this line -->
+      <div class="card">
+        <div class="card-header">🚗 Products in this Line
+          <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:#666;"
+                th:text="${products != null ? products.size() + ' products' : '0 products'}"></span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div th:if="${products == null or products.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">🚗</div>
+            <div class="empty-state-title">No products in this line</div>
+          </div>
+          <table th:if="${products != null and !products.isEmpty()}">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Product Name</th>
+                <th>Scale</th>
+                <th>Vendor</th>
+                <th>Stock</th>
+                <th>Buy Price</th>
+                <th>MSRP</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="p : ${products}">
+                <td th:text="${p.productCode}">-</td>
+                <td><strong th:text="${p.productName}">-</strong></td>
+                <td th:text="${p.productScale}">-</td>
+                <td th:text="${p.productVendor}">-</td>
+                <td>
+                  <span th:class="'badge ' + (${p.quantityInStock < 100} ? 'badge-danger' : (${p.quantityInStock < 1000} ? 'badge-warning' : 'badge-success'))"
+                        th:text="${p.quantityInStock}">-</span>
+                </td>
+                <td class="money" th:text="${p.buyPrice != null ? '$' + #numbers.formatDecimal(p.buyPrice,1,2) : '—'}">-</td>
+                <td class="money" th:text="${p.MSRP != null ? '$' + #numbers.formatDecimal(p.MSRP,1,2) : '—'}">-</td>
+                <td><a th:href="@{/products/{code}(code=${p.productCode})}" class="btn btn-secondary btn-sm">View</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

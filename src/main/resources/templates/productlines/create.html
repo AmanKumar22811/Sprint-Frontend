@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Product Line — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link active"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/productlines}">Product Lines</a><span class="sep">/</span>
+        <span>New Product Line</span>
+      </div>
+      <div class="topbar-title">New Product Line</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div class="page-header-title">Create New Product Line</div>
+        <a th:href="@{/productlines}" class="btn btn-secondary">← Back to List</a>
+      </div>
+
+      <div class="card">
+        <div class="card-header">➕ New Product Line Details</div>
+        <div class="card-body">
+          <form th:action="@{/productlines/new}" method="post">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Product Line Name <span class="required">*</span></label>
+                <input type="text" name="productLine" class="form-control" required placeholder="e.g. Electric Cars"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Image URL</label>
+                <input type="url" name="imageUrl" class="form-control" placeholder="https://example.com/image.jpg"/>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Text Description</label>
+                <textarea name="textDescription" class="form-control" rows="4" placeholder="Brief description of this product line..."></textarea>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">HTML Description</label>
+                <textarea name="htmlDescription" class="form-control" rows="4" placeholder="Optional HTML description..."></textarea>
+              </div>
+            </div>
+            <div style="margin-top:24px;" class="btn-group">
+              <button type="submit" class="btn btn-success">✅ Create Product Line</button>
+              <a th:href="@{/productlines}" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
