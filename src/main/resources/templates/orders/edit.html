@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Order — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link active"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/orders}">Orders</a><span class="sep">/</span>
+        <a th:href="@{/orders/{n}(n=${order.orderNumber})}" th:text="'#' + ${order.orderNumber}">Order</a><span class="sep">/</span>
+        <span>Edit</span>
+      </div>
+      <div class="topbar-title">Edit Order</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Edit Order</div>
+          <div class="page-header-sub" th:text="'Order #' + ${order.orderNumber}"></div>
+        </div>
+        <a th:href="@{/orders/{n}(n=${order.orderNumber})}" class="btn btn-secondary">← Cancel</a>
+      </div>
+
+      <div class="card">
+        <div class="card-header">✏️ Edit Order Details</div>
+        <div class="card-body">
+          <form th:action="@{/orders/{n}/edit(n=${order.orderNumber})}" method="post">
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Order Date <span class="required">*</span></label>
+                <input type="date" name="orderDate" class="form-control" required th:value="${order.orderDate}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Required Date <span class="required">*</span></label>
+                <input type="date" name="requiredDate" class="form-control" required th:value="${order.requiredDate}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Shipped Date</label>
+                <input type="date" name="shippedDate" class="form-control" th:value="${order.shippedDate}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Status <span class="required">*</span></label>
+                <select name="status" class="form-control" required>
+                  <option th:each="s : ${ {'In Process','Shipped','Cancelled','On Hold','Disputed','Resolved'} }"
+                          th:value="${s}"
+                          th:text="${s}"
+                          th:selected="${order.status == s}"></option>
+                </select>
+              </div>
+              <div class="form-group full">
+                <label class="form-label">Comments</label>
+                <textarea name="comments" class="form-control" rows="3" th:text="${order.comments}"></textarea>
+              </div>
+            </div>
+            <div style="margin-top:24px;" class="btn-group">
+              <button type="submit" class="btn btn-primary">💾 Save Changes</button>
+              <a th:href="@{/orders/{n}(n=${order.orderNumber})}" class="btn btn-secondary">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
