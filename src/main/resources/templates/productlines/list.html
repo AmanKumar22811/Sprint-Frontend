@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Product Lines — Classic Models</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link active"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span><span>Product Lines</span>
+      </div>
+      <div class="topbar-title">Product Lines</div>
+    </div>
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <div class="page-header-title">Product Lines</div>
+          <div class="page-header-sub" th:text="${count} + ' product lines'">0 lines</div>
+        </div>
+        <a th:href="@{/productlines/new}" class="btn btn-success">+ New Product Line</a>
+      </div>
+
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <!-- Product line cards with image -->
+      <div class="modules-grid">
+        <div th:if="${productLines == null or productLines.isEmpty()}" class="empty-state" style="grid-column:1/-1;">
+          <div class="empty-state-icon">📋</div>
+          <div class="empty-state-title">No product lines found</div>
+        </div>
+        <div th:each="pl : ${productLines}" class="module-card" style="cursor:default;">
+          <div th:if="${pl.imageUrl != null and pl.imageUrl != ''}" style="height:160px;overflow:hidden;">
+            <img th:src="${pl.imageUrl}" th:alt="${pl.productLine}" class="pl-card-image"
+                 onerror="this.parentElement.innerHTML='&lt;div class=img-placeholder&gt;📋&lt;/div&gt;'"/>
+          </div>
+          <div th:if="${pl.imageUrl == null or pl.imageUrl == ''}" class="img-placeholder">📋</div>
+          <div class="module-card-body">
+            <div class="module-card-title" th:text="${pl.productLine}">Product Line</div>
+            <div class="module-card-desc" th:text="${pl.textDescription != null ? pl.textDescription : 'No description available.'}">Desc</div>
+          </div>
+          <div class="module-card-footer">
+            <div class="btn-group">
+              <a th:href="@{/productlines/{name}(name=${pl.productLine})}" class="btn btn-secondary btn-sm">View</a>
+              <a th:href="@{/productlines/{name}/edit(name=${pl.productLine})}" class="btn btn-warning btn-sm">Edit</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pagination-controls" th:if="${totalPages > 1}">
+        <a th:if="${currentPage > 0}"
+           th:href="@{/productlines(page=${currentPage - 1})}"
+           class="btn btn-secondary btn-sm">← Prev</a>
+        <span class="page-info" th:text="'Page ' + (${currentPage + 1}) + ' of ' + ${totalPages}"></span>
+        <a th:if="${currentPage + 1 < totalPages}"
+           th:href="@{/productlines(page=${currentPage + 1})}"
+           class="btn btn-secondary btn-sm">Next →</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
