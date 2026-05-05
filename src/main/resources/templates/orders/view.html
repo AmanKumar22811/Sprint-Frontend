@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title th:text="'Order #' + ${order.orderNumber} + ' — Classic Models'">Order</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+    <a class="sidebar-brand" th:href="@{/}"><span class="brand-icon">🏎</span><span>Classic Models</span></a>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <a th:href="@{/}" class="nav-link"><span class="nav-icon">🏠</span> Dashboard</a>
+      <a th:href="@{/analytics}" class="nav-link"><span class="nav-icon">📊</span> Sales Analytics</a>
+      <div class="nav-section-label">Modules</div>
+      <a th:href="@{/employees}" class="nav-link"><span class="nav-icon">👤</span> Employees</a>
+      <a th:href="@{/customers}" class="nav-link"><span class="nav-icon">🤝</span> Customers</a>
+      <a th:href="@{/offices}" class="nav-link"><span class="nav-icon">🏢</span> Offices</a>
+      <a th:href="@{/orders}" class="nav-link active"><span class="nav-icon">📦</span> Orders</a>
+      <a th:href="@{/productlines}" class="nav-link"><span class="nav-icon">📋</span> Product Lines</a>
+    </div>
+  </nav>
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-breadcrumb">
+        <a th:href="@{/}">Home</a><span class="sep">/</span>
+        <a th:href="@{/orders}">Orders</a><span class="sep">/</span>
+        <span th:text="'#' + ${order.orderNumber}">Order</span>
+      </div>
+      <div class="topbar-title" th:text="'Order #' + ${order.orderNumber}">Order</div>
+    </div>
+    <div class="page-content">
+      <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+      <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+      <div class="page-header">
+        <div>
+          <div class="page-header-title" th:text="'Order #' + ${order.orderNumber}">Order</div>
+          <div class="page-header-sub">
+            <span th:class="'badge ' + (${order.status == 'Shipped'} ? 'badge-success' : (${order.status == 'Cancelled'} ? 'badge-danger' : (${order.status == 'In Process'} ? 'badge-primary' : (${order.status == 'On Hold'} ? 'badge-warning' : (${order.status == 'Resolved'} ? 'badge-info' : 'badge-secondary')))))"
+                  th:text="${order.status}">Status</span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <a th:href="@{/orders/{n}/edit(n=${order.orderNumber})}" class="btn btn-warning">✏️ Edit</a>
+          <a th:href="@{/orders}" class="btn btn-secondary">← Back</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">📦 Order Details</div>
+        <div class="card-body">
+          <div class="detail-grid">
+            <div class="detail-item">
+              <div class="detail-label">Order Number</div>
+              <div class="detail-value" th:text="${order.orderNumber}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Customer</div>
+              <div class="detail-value" th:if="${order.customer != null}">
+                <a th:href="@{/customers/{id}(id=${order.customer.customerNumber})}"
+                   th:text="${order.customer.customerName}">Customer</a>
+              </div>
+              <div class="detail-value empty" th:if="${order.customer == null}">—</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Order Date</div>
+              <div class="detail-value" th:text="${order.orderDate}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Required Date</div>
+              <div class="detail-value" th:text="${order.requiredDate}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Shipped Date</div>
+              <div class="detail-value" th:text="${order.shippedDate != null ? order.shippedDate : '—'}">-</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Status</div>
+              <div class="detail-value">
+                <span th:class="'badge ' + (${order.status == 'Shipped'} ? 'badge-success' : (${order.status == 'Cancelled'} ? 'badge-danger' : (${order.status == 'In Process'} ? 'badge-primary' : 'badge-warning')))"
+                      th:text="${order.status}">-</span>
+              </div>
+            </div>
+            <div class="detail-item full" style="grid-column:1/-1;">
+              <div class="detail-label">Comments</div>
+              <div class="detail-value" th:text="${order.comments != null and order.comments != '' ? order.comments : '—'}">-</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Line Items -->
+      <div class="card">
+        <div class="card-header">🛒 Order Line Items
+          <span style="margin-left:auto;font-size:0.8rem;font-weight:400;color:#666;"
+                th:text="${details != null ? details.size() + ' items' : '0 items'}"></span>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div th:if="${details == null or details.isEmpty()}" class="empty-state">
+            <div class="empty-state-icon">🛒</div>
+            <div class="empty-state-title">No line items found</div>
+          </div>
+          <table th:if="${details != null and !details.isEmpty()}">
+            <thead>
+              <tr>
+                <th>Line #</th>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Qty Ordered</th>
+                <th>Price Each</th>
+                <th>Line Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="d : ${details}">
+                <td th:text="${d.orderLineNumber}">-</td>
+                <td>
+                  <a th:if="${d.product != null}"
+                     th:href="@{/products/{code}(code=${d.id != null ? d.id.productCode : ''})}"
+                     th:text="${d.id != null ? d.id.productCode : '—'}">-</a>
+                  <span th:if="${d.product == null}" th:text="${d.id != null ? d.id.productCode : '—'}">-</span>
+                </td>
+                <td th:text="${d.product != null ? d.product.productName : '—'}">-</td>
+                <td th:text="${d.quantityOrdered}">-</td>
+                <td class="money" th:text="${d.priceEach != null ? '$' + #numbers.formatDecimal(d.priceEach,1,2) : '—'}">-</td>
+                <td class="money" th:text="${d.lineTotal != null ? '$' + #numbers.formatDecimal(d.lineTotal,1,2) : '—'}">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
